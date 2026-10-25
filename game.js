@@ -3442,7 +3442,7 @@ const logo=(()=>{
 const cv=$("logoCanvas");if(!cv)return{draw(){},ignite(){},relang(){}};
 const LW=cv.width,LH=cv.height,g=cv.getContext("2d");g.imageSmoothingEnabled=false;
 const st=document.createElement("style");st.textContent="#logoCanvas{display:block;margin:0 auto;height:auto;width:min(94%,calc(clamp(84px,22vh,150px)*3.6));image-rendering:pixelated}.logo .logo-sub{display:none}.logo-main{animation:none!important;text-shadow:none!important}";document.head.appendChild(st);
-const fam=()=>settings.pixelFont?'"DotGothic16","Galmuri11",monospace':"monospace";let key="";
+const fam=()=>'"DotGothic16","Galmuri11",monospace';let key="";
 // 글자를 그린 뒤 알파값을 0/1로 잘라서 계단 픽셀만 남긴다 (번짐·발광 없음)
 function mask(txt,px,base){const c=document.createElement("canvas");c.width=LW;c.height=LH;const x=c.getContext("2d");x.font=(settings.pixelFont?"":"bold ")+px+"px "+fam();x.textAlign="center";x.textBaseline="alphabetic";x.fillStyle="#fff";x.fillText(txt,LW/2,base);
  const d=x.getImageData(0,0,LW,LH).data,m=new Uint8Array(LW*LH);for(let i=0;i<m.length;i++)m[i]=d[i*4+3]>110?1:0;return m}
@@ -3470,11 +3470,12 @@ return{draw(){paint()},ignite(){key=""},relang(){key=""}}})();
 /* 한글 픽셀 폰트: DotGothic16에는 한글이 없어서 갈무리11(Galmuri, OFL 라이선스)로 한글을 채워요 */
 const GALMURI_URL="https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/";
 (()=>{const ff=document.createElement("style");ff.textContent='@font-face{font-family:"Galmuri11";src:url("'+GALMURI_URL+'Galmuri11.woff2") format("woff2"),url("'+GALMURI_URL+'Galmuri11.ttf") format("truetype");font-weight:400;font-display:swap}@font-face{font-family:"Galmuri11";src:url("'+GALMURI_URL+'Galmuri11-Bold.woff2") format("woff2");font-weight:700;font-display:swap}';document.head.appendChild(ff)})();
-(()=>{const st=document.createElement("style");st.textContent='body.pixel-font,body.pixel-font *{font-family:"DotGothic16","Galmuri11",monospace!important;-webkit-font-smoothing:none;font-smooth:never;text-rendering:optimizeSpeed}body.pixel-font :is(h1,h2,h3,b,strong,button){font-weight:400!important}';document.head.appendChild(st);
+(()=>{const st=document.createElement("style");st.textContent='body.pixel-font,body.pixel-font *{font-family:"DotGothic16","Galmuri11",monospace!important;-webkit-font-smoothing:none;font-smooth:never;text-rendering:optimizeSpeed}body.pixel-font :is(h1,h2,h3,b,strong,button){font-weight:400!important}body:not(.pixel-font),body:not(.pixel-font) *{font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif!important}';document.head.appendChild(st);
 const d=Object.getOwnPropertyDescriptor(CanvasRenderingContext2D.prototype,"font");
-Object.defineProperty(ctx,"font",{configurable:true,get(){return d.get.call(this)},set(v){d.set.call(this,settings.pixelFont?String(v).replace(/bold\s*/,"").replace(/(monospace|sans-serif)\s*$/,'"DotGothic16","Galmuri11",$1'):v)}});
+Object.defineProperty(ctx,"font",{configurable:true,get(){return d.get.call(this)},set(v){d.set.call(this,settings.pixelFont?String(v).replace(/bold\s*/,"").replace(/(monospace|sans-serif)\s*$/,'"DotGothic16","Galmuri11",$1'):String(v).replace(/(monospace|sans-serif)\s*$/,'"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif'))}});
 if(document.fonts&&document.fonts.load){document.fonts.load('16px "DotGothic16"','PIXEL');try{const pr=document.fonts.load('11px "Galmuri11"','최후의 불씨');if(pr&&typeof pr.then==="function")pr.then(()=>logo.relang(),()=>{})}catch(_){}}})();
 function applyFont(){document.body.classList.toggle("pixel-font",!!settings.pixelFont)}
+{const r=document.querySelector('[data-i18n="rowFont"]');if(r){const k='<strong>픽셀 폰트</strong><small>켜면 도트 글꼴, 끄면 매끈한 일반 글꼴로 읽기 편해져요 (로고는 그대로)</small>';r.dataset.ko=k;if(!isEN())r.innerHTML=k}}
 /* ================= INTRO CINEMATIC · 스토리 인트로 ================= */
 /* ================= 캐릭터별 엔딩 =================
    name: 도감에 표시되는 엔딩 이름 · t/d: 엔딩 창 제목/본문 · s: 엔딩 컷 자막 3장 [한국어, 영어] (이그니는 아래 EC 장면을 그대로 써요) */
@@ -3505,7 +3506,7 @@ css.textContent=`#introRoot{position:absolute;inset:0;z-index:70;background:#020
 #introSkip{position:absolute;top:2.4%;right:2%;z-index:5;min-height:40px;padding:0 16px;font:inherit;font-size:15px;letter-spacing:.06em;color:#ffe9b8;background:rgba(10,6,4,.7);border:2px solid #ffb04a;border-radius:0;cursor:pointer;box-shadow:3px 3px 0 #000}
 #introSkip:hover,#introSkip:focus-visible{background:#ffb04a;color:#2a0e08;outline:none}`;
 document.head.appendChild(css);
-const fnt=()=>settings.pixelFont?'"DotGothic16","Galmuri11",monospace':"sans-serif";
+const fnt=()=>settings.pixelFont?'"DotGothic16","Galmuri11",monospace':'"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif';
 const mixc=(a,b,t)=>{const p=s=>[1,3,5].map(i=>parseInt(s.substr(i,2),16)),A=p(a),B=p(b);return`rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join()})`};
 const ease=u=>1-(1-clamp(u,0,1))**3,sky=(c1,c2)=>{for(let y=0;y<TH;y+=2){g.fillStyle=mixc(c1,c2,y/TH);g.fillRect(0,y,TW,2)}};
 const ell=(cx,cy,rx,ry,c)=>{g.fillStyle=c;for(let y=-ry;y<=ry;y+=2){const w=Math.floor(Math.sqrt(1-(y/ry)**2)*rx/2)*2;g.fillRect(cx-w,cy+y,w*2,2)}};
@@ -4040,7 +4041,7 @@ mapCap:`Scene`,tagline:`A baby dragon and the guardian beasts protect the last e
 play:`Play`,settings:`Settings`,howto:`How to Play`,titleHint:`<kbd>↑</kbd><kbd>↓</kbd> Select · <kbd>Enter</kbd> Confirm · <kbd>F</kbd> Fullscreen`,version:`V0.37 · Guardians and Spirit Beasts`,
 langHint:`Change the language used in the game`,
 rowFs:`<strong>Fullscreen</strong><small>You can also toggle it with the F key</small>`,
-rowFont:`<strong>Pixel font</strong><small>Show text in a dotted pixel font</small>`,
+rowFont:`<strong>Pixel font</strong><small>ON: dotted pixel letters · OFF: smooth regular font, easier to read (logo stays pixel)</small>`,
 rowFx:`<strong>Ember effect</strong><small>Show embers drifting through the forest</small>`,
 rowVig:`<strong>Dark screen edges</strong><small>Vignette effect for a night mood</small>`,
 rowAuto:`<strong>Auto pause</strong><small>Pause the game when you leave the window</small>`,
