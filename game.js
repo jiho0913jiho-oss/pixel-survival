@@ -4468,14 +4468,14 @@ return{read,del,save,cont,summary}})();
 /* ================= 클리어 코인 상점: 영구 강화 =================
    각 항목: per = 단계당 효과 · cost = 단계별 가격(코인) · 마지막 단계 수가 최대 단계 */
 const SHOP_ITEMS=[
- {id:"hp",icon:"❤️",name:"단단한 비늘",nameEn:"Tough Scales",desc:"시작 최대 체력 +5%",descEn:"Starting max HP +5%",per:.05,cost:[1,1,2,2,3]},
- {id:"atk",icon:"⚔️",name:"뜨거운 숨결",nameEn:"Hot Breath",desc:"모든 공격 피해 +3%",descEn:"All damage +3%",per:.03,cost:[1,2,2,3,3]},
- {id:"xp",icon:"⭐",name:"불씨 감각",nameEn:"Ember Sense",desc:"경험치 획득 +3%",descEn:"EXP gain +3%",per:.03,cost:[1,1,2,2,3]},
- {id:"spd",icon:"💨",name:"가벼운 발",nameEn:"Light Feet",desc:"이동 속도 +2%",descEn:"Move speed +2%",per:.02,cost:[1,2,2]},
- {id:"pick",icon:"🧲",name:"끌어당기는 손",nameEn:"Pulling Hands",desc:"흡수 범위 +6%",descEn:"Pickup range +6%",per:.06,cost:[1,1,2]},
- {id:"regen",icon:"💚",name:"따뜻한 둥지",nameEn:"Warm Nest",desc:"초당 최대 체력의 0.1% 회복",descEn:"Regenerate 0.1% of max HP per second",per:.001,cost:[1,2,3]},
- {id:"reroll",icon:"🎲",name:"다시 뽑기",nameEn:"Reroll",desc:"판마다 강화 카드 다시 뽑기 +1회",descEn:"+1 upgrade reroll per run",per:1,cost:[1,2,3]},
- {id:"life",icon:"🏯",name:"탑의 가호",nameEn:"Tower's Grace",desc:"마법의 탑 이지 목숨 +1",descEn:"+1 life in the Magic Tower (Easy)",per:1,cost:[4]}];
+ {id:"hp",icon:"❤️",name:"단단한 비늘",nameEn:"Tough Scales",desc:"시작 최대 체력 +5%",descEn:"Starting max HP +5%",per:.05,cost:[1,2,3,5,7]},
+ {id:"atk",icon:"⚔️",name:"뜨거운 숨결",nameEn:"Hot Breath",desc:"모든 공격 피해 +3%",descEn:"All damage +3%",per:.03,cost:[2,3,4,6,8]},
+ {id:"xp",icon:"⭐",name:"불씨 감각",nameEn:"Ember Sense",desc:"경험치 획득 +3%",descEn:"EXP gain +3%",per:.03,cost:[1,2,3,5,7]},
+ {id:"spd",icon:"💨",name:"가벼운 발",nameEn:"Light Feet",desc:"이동 속도 +2%",descEn:"Move speed +2%",per:.02,cost:[2,3,5]},
+ {id:"pick",icon:"🧲",name:"끌어당기는 손",nameEn:"Pulling Hands",desc:"흡수 범위 +6%",descEn:"Pickup range +6%",per:.06,cost:[1,2,3]},
+ {id:"regen",icon:"💚",name:"따뜻한 둥지",nameEn:"Warm Nest",desc:"초당 최대 체력의 0.1% 회복",descEn:"Regenerate 0.1% of max HP per second",per:.001,cost:[2,3,5]},
+ {id:"reroll",icon:"🎲",name:"다시 뽑기",nameEn:"Reroll",desc:"판마다 강화 카드 다시 뽑기 +1회",descEn:"+1 upgrade reroll per run",per:1,cost:[1,3,5]},
+ {id:"life",icon:"🏯",name:"탑의 가호",nameEn:"Tower's Grace",desc:"마법의 탑 이지 목숨 +1",descEn:"+1 life in the Magic Tower (Easy)",per:1,cost:[6]}];
 /* 코인 획득: 스토리 클리어 1개 (하드는 +hardBonus) · 마법의 탑은 한 판에서 towerEvery층마다 1개 */
 const COIN_RULE={hardBonus:1,towerEvery:10};
 const SHOP_KEY="ps_shop_v1";
@@ -4505,7 +4505,7 @@ function paint(focusId){const L=shopLv(),coins=rec.coins(),ci=coinImg();pn.setAt
  +SHOP_ITEMS.map(it=>{const lv=Math.min(it.cost.length,L[it.id]|0),max=lv>=it.cost.length,price=max?0:it.cost[lv],can=!max&&coins>=price;
   return '<div class="sh-item"><span class="ic">'+it.icon+'</span><strong>'+tf(it,"name")+'</strong><small>'+tf(it,"desc")+'</small><div class="sh-row"><span class="sh-pips">'+it.cost.map((_,i)=>'<i class="'+(i<lv?"on":"")+'"></i>').join("")+'</span>'
    +(max?'<span class="sh-max">MAX</span>':'<button type="button" class="sh-buy" data-buy="'+it.id+'"'+(can?"":" disabled")+'>'+ci+' '+price+'</button>')+'</div></div>'}).join("")
- +'</div><p class="sh-note">'+(msg||tx("코인은 스토리 클리어(하드는 +1)와 마법의 탑 10층마다 얻을 수 있어요. 강화는 다음 판부터 적용돼요.","Earn coins by clearing the story (+1 on Hard) and every 10 floors in the Magic Tower. Upgrades apply from your next run."))+'</p>'
+ +'</div><p class="sh-note">'+(msg||tx("코인은 일일·주간 퀘스트, 스토리 클리어(하드는 +1), 마법의 탑 10층마다 얻을 수 있어요. 강화는 다음 판부터 적용돼요.","Earn coins from daily/weekly quests, clearing the story (+1 on Hard) and every 10 floors in the Magic Tower. Upgrades apply from your next run."))+'</p>'
  +'<div class="panel-actions"><button class="ghost-button big" type="button" data-refund>'+tx("전부 환불","Refund all")+'</button><button class="primary-button" type="button" data-sh-close>'+tx("돌아가기","Back")+'</button></div></div>';
  pn.querySelectorAll("[data-buy]").forEach(b=>b.addEventListener("click",()=>buy(b.dataset.buy)));
  pn.querySelector("[data-sh-close]").addEventListener("click",closeAndRefocus);
